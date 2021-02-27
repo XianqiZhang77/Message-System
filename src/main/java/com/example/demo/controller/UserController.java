@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,6 @@ public class UserController {
     @PostMapping(path="/person")
     public Person person(@RequestBody Person person) throws Exception {
 
-        //String msg = String.format("%s is %s years old", name, age);
         if (person.getAge() < 18) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "age less than 18");
         }
