@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.ray.message.controller;
 
 import com.example.demo.model.Person;
 import org.springframework.http.HttpStatus;
