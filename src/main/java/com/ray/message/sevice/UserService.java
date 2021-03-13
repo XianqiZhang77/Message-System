@@ -43,6 +43,7 @@ public class UserService {
             throw new ServiceException(ErrorCode.USERNAME_ALREADY_EXISTS);
         }
         user.setPassword(PasswordUtil.encrypt(user.getPassword()));
+        user.setCreateTime(new Date());
         userDao.insert(user);
     }
 

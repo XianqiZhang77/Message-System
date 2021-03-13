@@ -23,7 +23,7 @@ public class UserController {
     public RespResult login(@RequestBody User user, HttpServletResponse response) {
         try {
             UserToken userToken = userService.login(user.getUsername(), user.getPassword());
-            response.setHeader("token", userToken.getToken());
+            //response.setHeader("token", userToken.getToken());
             return RespResult.createWithData(userToken);
         } catch (ServiceException e) {
             return RespResult.createWithErrorCode(e.getErrorCode());
@@ -33,7 +33,6 @@ public class UserController {
     @PostMapping("register")
     public RespResult register(@RequestBody User user) {
         try {
-            user.setCreateTime(new Date());
             userService.register(user);
             return RespResult.createWithData(null);
         } catch (ServiceException e) {
