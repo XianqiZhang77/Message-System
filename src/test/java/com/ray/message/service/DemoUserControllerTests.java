@@ -1,4 +1,4 @@
-package com.ray.message;
+package com.ray.message.service;
 
 import com.ray.message.dao.UserDao;
 import com.ray.message.dao.UserTokenDao;
@@ -29,10 +29,8 @@ class DemoUserControllerTests {
 
 	@InjectMocks
 	private UserService userService;
-
 	@Mock
 	private UserDao userDao;
-
 	@Mock
 	private UserTokenDao userTokenDao;
 
@@ -82,12 +80,4 @@ class DemoUserControllerTests {
 			assertEquals(ErrorCode.WRONG_PASSWORD, e.getErrorCode());
 		}
 	}
-
-
-
-	@Test
-	void contextLoads() {
-	}
-
-
 }
