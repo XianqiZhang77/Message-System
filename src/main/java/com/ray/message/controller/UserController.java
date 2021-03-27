@@ -9,49 +9,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/user")
+@ControllerAdvice
 public class UserController {
 
     @Autowired
     UserService userService;
 
     @PostMapping("login")
-    public RespResult login(@RequestBody User user, HttpServletResponse response) {
-        try {
-            UserToken userToken = userService.login(user.getUsername(), user.getPassword());
-            //response.setHeader("token", userToken.getToken());
-            return RespResult.createWithData(userToken);
-        } catch (ServiceException e) {
-            return RespResult.createWithErrorCode(e.getErrorCode());
-        }
+    public RespResult login(@RequestBody User user) throws ServiceException {
+        UserToken userToken = userService.login(user.getUsername(), user.getPassword());
+        return RespResult.createWithData(userToken);
     }
 
     @PostMapping("register")
-    public RespResult register(@RequestBody User user) {
-        try {
-            userService.register(user);
-            return RespResult.createWithData(null);
-        } catch (ServiceException e) {
-            return RespResult.createWithErrorCode(e.getErrorCode());
-        }
+    public RespResult register(@RequestBody User user) throws ServiceException {
+        userService.register(user);
+        return RespResult.createWithData(null);
     }
 
     @RequestMapping("logout")
-    public RespResult logout(HttpServletRequest request) {
+    public RespResult logout(HttpServletRequest request) throws ServiceException {
         String token = request.getHeader("token");
-        try {
-            userService.verifyToken(token);
-        } catch (ServiceException e) {
-            return RespResult.createWithErrorCode(e.getErrorCode());
-        }
+        userService.verifyToken(token);
         userService.logout(token);
         return RespResult.createWithData("logout successfully");
     }
-
-
-
 }
