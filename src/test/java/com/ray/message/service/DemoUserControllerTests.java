@@ -1,6 +1,7 @@
 package com.ray.message.service;
 
 import com.ray.message.dao.UserDao;
+import com.ray.message.dao.UserDaoTest;
 import com.ray.message.dao.UserTokenDao;
 import com.ray.message.enums.ErrorCode;
 import com.ray.message.exception.ServiceException;
@@ -42,18 +43,18 @@ class DemoUserControllerTests {
 	@AfterEach
 	public void verifyNoIntegrations() {
 		Mockito.verifyNoMoreInteractions(userTokenDao);
+		Mockito.verifyNoMoreInteractions(userDao);
 	}
 
 	@Test
 	public void testLogin_verify_userTokenDao() throws ServiceException {
-//		String token = UUIDUtil.getToken();
-//		UserToken userToken = new UserToken(1, token, DateUtil.addDays(new Date(), 7));
 		User user = new User();
 		user.setUsername("1");
 		user.setPassword(PasswordUtil.encrypt("123"));
 		when(userDao.findByName("1")).thenReturn(user);
 		userService.login("1", "123");
 		verify(userTokenDao).insert(any(UserToken.class));
+		verify(userDao).findByName("1");
 	}
 
 	@Test
@@ -66,6 +67,8 @@ class DemoUserControllerTests {
 		} catch (ServiceException e) {
 			assertEquals(ErrorCode.USERNAME_UN_EXISTS, e.getErrorCode());
 		}
+
+		verify(userDao).findByName("1");
 	}
 
 	@Test
@@ -79,5 +82,78 @@ class DemoUserControllerTests {
 		} catch (ServiceException e) {
 			assertEquals(ErrorCode.WRONG_PASSWORD, e.getErrorCode());
 		}
+		verify(userDao).findByName("1");
 	}
+
+	@Test
+	void testRegister_UsernameExists_Exception() {
+		User user = new User();
+		user.setUsername("1");
+		when(userDao.findByName("1")).thenReturn(user);
+		try {
+			userService.register(user);
+		} catch (ServiceException e) {
+			assertEquals(ErrorCode.USERNAME_ALREADY_EXISTS, e.getErrorCode());
+		}
+		verify(userDao).findByName("1");
+	}
+
+	@Test
+	void testRegister_Success() throws ServiceException {
+		User user = new User();
+		user.setUsername("1");
+		when(userDao.findByName("1")).thenReturn(null);
+		userService.register(user);
+		verify(userDao).findByName("1");
+		verify(userDao).insert(any(User.class));
+	}
+
+	@Test
+	void testVerifyToken_INVALID_TOKEN() {
+		when( userTokenDao.findByToken("1")).thenReturn(null);
+		try {
+			userService.verifyToken("1");
+		} catch (ServiceException e) {
+			assertEquals(ErrorCode.INVALID_TOKEN, e.getErrorCode());
+		}
+		verify(userTokenDao).findByToken("1");
+	}
+
+	@Test
+	void testVerifyToken_TOKEN_EXPIRED() {
+		UserToken userToken = new UserToken();
+		String token = UUIDUtil.getToken();
+		userToken.setToken(token);
+		userToken.setExpireTime(DateUtil.addDays(new Date(166668889), 7));
+		when( userTokenDao.findByToken(token)).thenReturn(userToken);
+		try {
+			userService.verifyToken(token);
+		} catch (ServiceException e) {
+			assertEquals(ErrorCode.TOKEN_EXPIRED, e.getErrorCode());
+		}
+		verify(userTokenDao).findByToken(token);
+	}
+
+	@Test
+	void testVerifyToken_Pass() throws ServiceException {
+		UserToken userToken = new UserToken();
+		String token = UUIDUtil.getToken();
+		userToken.setToken(token);
+		userToken.setExpireTime(DateUtil.addDays(new Date(), 7));
+		when(userTokenDao.findByToken(token)).thenReturn(userToken);
+		assertEquals(true, userService.verifyToken(token));
+		verify(userTokenDao).findByToken(token);
+	}
+	@Test
+	void testLogout() {
+		UserToken userToken = new UserToken();
+		String token = UUIDUtil.getToken();
+		userToken.setToken(token);
+		userToken.setExpireTime(DateUtil.addDays(new Date(), 7));
+		when(userTokenDao.findByToken(token)).thenReturn(userToken);
+		userService.logout(token);
+		verify(userTokenDao).findByToken(token);
+		verify(userTokenDao).deleteUserToken(token);
+	}
+
 }
