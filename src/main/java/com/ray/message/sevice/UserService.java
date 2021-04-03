@@ -62,6 +62,6 @@ public class UserService {
 
     public void logout(String token) {
         UserToken userToken = userTokenDao.findByToken(token);
-        userTokenDao.deleteUserToken(token);
+        userTokenDao.deleteUserToken(userToken.getToken());
     }
 }
