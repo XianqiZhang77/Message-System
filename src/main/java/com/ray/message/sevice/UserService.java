@@ -44,6 +44,7 @@ public class UserService {
         }
         user.setPassword(PasswordUtil.encrypt(user.getPassword()));
         user.setCreateTime(new Date());
+        user.setMemo("");
         userDao.insert(user);
     }
 
