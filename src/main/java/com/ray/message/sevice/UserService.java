@@ -49,7 +49,7 @@ public class UserService {
     }
 
 
-    public boolean verifyToken(String token) throws ServiceException {
+    public Integer verifyToken(String token) throws ServiceException {
         UserToken userToken = userTokenDao.findByToken(token);
         if (userToken == null) {
             throw new ServiceException(ErrorCode.INVALID_TOKEN);
@@ -57,11 +57,12 @@ public class UserService {
         if (userToken.getExpireTime().before(new Date())) {
             throw new ServiceException(ErrorCode.TOKEN_EXPIRED);
         }
-        return true;
+        return userToken.getUserId();
     }
 
     public void logout(String token) {
         UserToken userToken = userTokenDao.findByToken(token);
         userTokenDao.deleteUserToken(userToken.getToken());
     }
+
 }

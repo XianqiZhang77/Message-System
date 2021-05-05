@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/user")
@@ -19,8 +20,9 @@ public class UserController {
     UserService userService;
 
     @PostMapping("login")
-    public RespResult login(@RequestBody User user) throws ServiceException {
+    public RespResult login(@RequestBody User user, HttpServletResponse response) throws ServiceException {
         UserToken userToken = userService.login(user.getUsername(), user.getPassword());
+        response.setHeader("token", userToken.getToken());
         return RespResult.createWithData(userToken);
     }
 
