@@ -10,7 +10,7 @@ public class PasswordUtilTest {
     @Test
     public void testEncrypt() {
         String encryptedString = PasswordUtil.encrypt("123456");
-        assertEquals("701AEA5CD1EFCACBAABF07DC4B743923", encryptedString);
+        assertEquals("A78DE68013AE19C006D05EEB4EA84F39", encryptedString);
     }
 
 }
