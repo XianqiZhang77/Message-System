@@ -1,0 +1,1 @@
+| __JaCoCo Test Coverage__ | [![coverage](../badges/jacoco.svg)](https://github.com/pfctgeorge/Message-System/actions/workflows/build.yml) [![branches coverage](../badges/branches.svg)](https://github.com/pfctgeorge/Message-System/actions/workflows/build.yml)  |
