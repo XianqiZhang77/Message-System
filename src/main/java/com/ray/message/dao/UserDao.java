@@ -24,10 +24,9 @@ public interface UserDao {
 
     int updateUser(User user);
 
-    @Insert("insert into user (id, username, password, nickname, email, memo, location, create_time) " +
+    @Insert("insert into user (id, username, password, nickname, email) " +
             "values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}," +
-            "#{nickname,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}," +
-            "#{location,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE})")
+            "#{nickname,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR})")
     int insert(User user);
 
     @Select("select * from user")
