@@ -5,6 +5,7 @@ import com.ray.message.model.User;
 import com.ray.message.model.UserToken;
 import com.ray.message.rep.RespResult;
 import com.ray.message.sevice.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/user")
 @ControllerAdvice
+@Log4j2
 public class UserController {
 
     @Autowired
