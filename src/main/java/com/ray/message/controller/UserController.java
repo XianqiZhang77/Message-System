@@ -20,6 +20,7 @@ public class UserController {
 
     @PostMapping("login")
     public RespResult login(@RequestBody User user) throws ServiceException {
+        log.info("user: " + user);
         UserToken userToken = userService.login(user.getUsername(), user.getPassword());
         return RespResult.createWithData(userToken);
     }
