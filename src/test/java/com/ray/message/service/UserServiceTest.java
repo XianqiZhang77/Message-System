@@ -1,5 +1,6 @@
 package com.ray.message.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import com.ray.message.dao.UserDao;
@@ -31,5 +32,10 @@ public class UserServiceTest {
         user.setPassword("hi");
 
         this.userService.register(user);
+    }
+
+    @Test
+    public void testRegister_badCase() throws Exception {
+        assertEquals(2, 2);
     }
 }

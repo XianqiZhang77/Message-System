@@ -27,6 +27,11 @@ public class UserController {
         return RespResult.createWithData(userToken);
     }
 
+    @PostMapping("/hello")
+    public RespResult helloWorld() {
+        return RespResult.createWithData(1);
+    }
+
     @PostMapping("register")
     public RespResult register(@RequestBody User user) throws ServiceException {
         userService.register(user);
