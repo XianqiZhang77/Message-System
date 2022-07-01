@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ray.message.dao.TestUserDAO;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ public class UserControllerIntegrationTest {
     @Autowired
     private TestUserDAO testUserDAO;
 
+    @BeforeEach
+    public void setup() {
+        this.testUserDAO.deleteUser("george1");
+    }
+
     @Test
     public void testRegister_happyCase() throws Exception {
         String requestBody = "{\"username\": \"george1\", \"password\": \"123\", \"repeatPassword\": \"123\"}";
@@ -38,7 +44,6 @@ public class UserControllerIntegrationTest {
                 .andExpect(jsonPath("$.code", is(0)))
                 .andExpect(jsonPath("$.message", is("success")));
 
-        this.testUserDAO.deleteUser("george1");
     }
 
 
